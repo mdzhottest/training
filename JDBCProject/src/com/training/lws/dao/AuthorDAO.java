@@ -37,7 +37,7 @@ public class AuthorDAO implements Serializable{
 	public void deleteAuthor(Author a) throws SQLException{
 		Connection conn = getConnection();
 		
-		String delQuer = "Delete from tbl_book where tbl_authorId = ?;";
+		String delQuer = "Delete from tbl_book where authorId = ?;";
 		PreparedStatement stmt = conn.prepareStatement(delQuer);
 		
 		stmt.setInt(1, a.getAuthorId());

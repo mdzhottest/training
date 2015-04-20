@@ -47,6 +47,8 @@ public class BookDAO implements Serializable {
 		
 		stmt.setInt(1, a.getBookid());
 		
+		stmt.executeUpdate();
+		
 	}
 	
 	public List<Book> readAllBooks() throws SQLException{

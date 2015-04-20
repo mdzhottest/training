@@ -27,7 +27,7 @@ public class AuthorDAO implements Serializable{
 	public void updateAuthor(Author a) throws SQLException{
 		Connection conn = getConnection();
 		
-		String updateQuery = "update tbl_author det authorName = ? where authorId = ?";
+		String updateQuery = "update tbl_author set authorName = ? where authorId = ?";
 		PreparedStatement stmt = conn.prepareStatement(updateQuery);
 		stmt.setString(1, a.getAuthorName());
 		stmt.setInt(2, a.getAuthorId());
@@ -37,7 +37,7 @@ public class AuthorDAO implements Serializable{
 	public void deleteAuthor(Author a) throws SQLException{
 		Connection conn = getConnection();
 		
-		String delQuer = "Delete from tbl_book where authorId = ?;";
+		String delQuer = "Delete from tbl_author where authorId = ?;";
 		PreparedStatement stmt = conn.prepareStatement(delQuer);
 		
 		stmt.setInt(1, a.getAuthorId());

@@ -11,6 +11,13 @@ import com.training.entities.domain.BookLoan;
 
 public class BookLoanDAO implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2844457541155337594L;
+
+
+
 	public void addBookLoan(BookLoan book) throws SQLException{
 		Connection conn = getConnection();
 

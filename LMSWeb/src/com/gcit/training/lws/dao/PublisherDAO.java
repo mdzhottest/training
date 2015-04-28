@@ -1,4 +1,4 @@
-package com.training.lws.dao;
+package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.training.entities.domain.Publisher;
+import com.gcit.training.lws.domain.Publisher;
 
 public class PublisherDAO extends BaseDAO<Publisher> implements Serializable{
 
@@ -62,7 +62,7 @@ public class PublisherDAO extends BaseDAO<Publisher> implements Serializable{
 			a.setPublisherId(rs.getInt("publisherId"));
 			a.setPublisherName(rs.getString("publisherName"));
 			a.setPublisherAddress(rs.getString("publisherAddress"));
-			a.setPublisherPhone(rs.getInt("publisherPhone"));
+			a.setPublisherPhone(rs.getString("publisherPhone"));
 			
 			pubs.add(a);
 		}

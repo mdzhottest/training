@@ -1,4 +1,4 @@
-package com.training.lws.dao;
+package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.training.entities.domain.Book;
-import com.training.entities.domain.Genre;
+import com.gcit.training.lws.domain.Book;
+import com.gcit.training.lws.domain.Genre;
 
 public class GenreDAO extends BaseDAO<Genre> implements Serializable{
 

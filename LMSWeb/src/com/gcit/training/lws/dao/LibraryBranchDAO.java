@@ -1,4 +1,4 @@
-package com.training.lws.dao;
+package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.training.entities.domain.LibraryBranch;
+import com.gcit.training.lws.domain.LibraryBranch;
 
 public class LibraryBranchDAO extends BaseDAO<LibraryBranch> implements Serializable{
 
@@ -30,7 +30,7 @@ public class LibraryBranchDAO extends BaseDAO<LibraryBranch> implements Serializ
 		save(upQuer, new Object []{a.getLibraryName(),a.getLibraryAddress(),a.getLibraryId()});
 	}
 	
-	public void deleteAuthor(LibraryBranch a) throws SQLException{
+	public void deleteBranch(LibraryBranch a) throws SQLException{
 		String rQ = "delete from tbl_library_branch where branchId=?";
 		save(rQ,new Object[]{a.getLibraryId()});
 		

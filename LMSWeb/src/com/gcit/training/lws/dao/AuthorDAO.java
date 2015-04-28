@@ -1,11 +1,11 @@
-package com.training.lws.dao;
+package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
 import java.sql.*;
 import java.util.*;
 
-import com.training.entities.domain.Author;
-import com.training.entities.domain.Book;
+import com.gcit.training.lws.domain.Author;
+import com.gcit.training.lws.domain.Book;
 
 
 public class AuthorDAO extends BaseDAO<Author> implements Serializable{
@@ -24,7 +24,7 @@ public class AuthorDAO extends BaseDAO<Author> implements Serializable{
 	}
 	
 	public void updateAuthor(Author a) throws SQLException{
-		save("Update tbl_author set authorName = authorId =?", new Object[]{a.getAuthorName(), a.getAuthorId()});
+		save("Update tbl_author set authorName = ? where authorId =?", new Object[]{a.getAuthorName(), a.getAuthorId()});
 	}
 	
 	public void delAuthor (Author a) throws SQLException{
@@ -92,7 +92,6 @@ public class AuthorDAO extends BaseDAO<Author> implements Serializable{
 	protected List<Author> mapResultsFirstLevel(ResultSet rs) throws SQLException {
 		// TODO Auto-generated method stub
 		List<Author> a = new ArrayList<Author>();
-		BookDAO bd = new BookDAO(conn);
 		while (rs.next()) {
 			Author b = new Author();
 			b.setAuthorId(rs.getInt("authorId"));

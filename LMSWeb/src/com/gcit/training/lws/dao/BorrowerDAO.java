@@ -1,4 +1,4 @@
-package com.training.lws.dao;
+package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.training.entities.domain.Borrower;
+import com.gcit.training.lws.domain.Borrower;
 
 public class BorrowerDAO extends BaseDAO<Borrower> implements Serializable{
 
@@ -55,17 +55,17 @@ public class BorrowerDAO extends BaseDAO<Borrower> implements Serializable{
 		else 
 			return null;
 	}
-	
-	
+
+
 	public Borrower getBorrowerByCardNo(int cardNo) throws SQLException{
 		String select = "select * from tbl_borrower where cardNo=?";
-		 @SuppressWarnings("unchecked")
-			List<Borrower> borrowers=(List<Borrower>) read(select,new Object[]{cardNo});
-		  if(borrowers!=null&&borrowers.size()>0)
-		  {
-				return borrowers.get(0);	
-		  }
-		  else return null;
+		@SuppressWarnings("unchecked")
+		List<Borrower> borrowers=(List<Borrower>) read(select,new Object[]{cardNo});
+		if(borrowers!=null&&borrowers.size()>0)
+		{
+			return borrowers.get(0);	
+		}
+		else return null;
 	}
 
 	@Override
@@ -73,21 +73,44 @@ public class BorrowerDAO extends BaseDAO<Borrower> implements Serializable{
 		List<Borrower> bor = new ArrayList<Borrower>();
 		while(rs.next()) {
 			Borrower borrower = new Borrower();
-		  borrower.setCardNo(rs.getInt("cardNo"));
-		  borrower.setBorrowerName(rs.getString("name"));
-		  borrower.setBorrowerAddress(rs.getString("address"));
-		  borrower.setBorrowerPhone(rs.getString("phone"));
-		bor.add(borrower);
+			borrower.setCardNo(rs.getInt("cardNo"));
+			borrower.setBorrowerName(rs.getString("name"));
+			borrower.setBorrowerAddress(rs.getString("address"));
+			borrower.setBorrowerPhone(rs.getString("phone"));
+			bor.add(borrower);
 		}
 
 		return bor;
 	}
 
-	
+
 	@Override
 	protected List<Borrower> mapResultsFirstLevel(ResultSet rs) throws SQLException {
+		List<Borrower> b = new ArrayList<Borrower>();
+		while(rs.next()){
+			Borrower bda = new Borrower();
+			bda.setCardNo(rs.getInt("cardNo"));
+			bda.setBorrowerName(rs.getNString("borrowerName"));
+			bda.setBorrowerAddress(rs.getString("borrowerAddress"));
+			bda.setBorrowerPhone(rs.getString("borrowerPhone"));
+
+			b.add(bda);
+		}
+		return b;
+
+	}
+
+	public Borrower readOne(int cardNo) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		@SuppressWarnings("unchecked")
+		List<Borrower> b = (List<Borrower>) read("SELECT * FROM tbl_borrower where cardNo = ?", new Object[]{cardNo});
+
+		if(b != null && b.size()>0){
+			return b.get(0);
+		}else{
+			return null;
+		}
+
 	}
 
 

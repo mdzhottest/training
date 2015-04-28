@@ -1,4 +1,4 @@
-package com.training.lws.dao;
+package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.training.entities.domain.Author;
-import com.training.entities.domain.Book;
+import com.gcit.training.lws.domain.Author;
+import com.gcit.training.lws.domain.Book;
 
 public class BookDAO extends BaseDAO<Book> implements Serializable {
 
@@ -81,7 +81,7 @@ public class BookDAO extends BaseDAO<Book> implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public List<Book> readAll() throws SQLException{
-		return (List<Book>) read("Select * FROM tbl_author", null);
+		return (List<Book>) read("Select * FROM tbl_book", null);
 	}
 	
 	@Override
@@ -97,7 +97,7 @@ public class BookDAO extends BaseDAO<Book> implements Serializable {
 			b.setPublisher(pD.readOne(rs.getInt("pubId")));
 			
 			@SuppressWarnings("unchecked")
-			List<Author> a = (List<Author>) aD.read("Select * from tbl_author where authorId in "+ "SELECT authorId from tbl_book_authors where bookId = ?", 
+			List<Author> a = (List<Author>) aD.read("Select * from tbl_author where authorId in (SELECT authorId from tbl_book_authors where bookId = ?)", 
 					new Object[]{b.getBookid()});
 			
 			b.setAuthors(a);
@@ -121,7 +121,6 @@ public class BookDAO extends BaseDAO<Book> implements Serializable {
 	protected List<Book> mapResultsFirstLevel(ResultSet rs) throws SQLException {
 		List<Book> books = new ArrayList<Book>();
 		PublisherDAO pDAO = new PublisherDAO(conn);
-		AuthorDAO aDAO = new AuthorDAO(conn);
 		
 		while (rs.next()) {
 			Book b = new Book();
@@ -134,6 +133,12 @@ public class BookDAO extends BaseDAO<Book> implements Serializable {
 		return books;
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void updateBook(Book a) throws SQLException{
+		// TODO Auto-generated method stub
+		String quer = "Update tbl_book set title=?, pubId=? where bookId = ?";
+		save(quer, new Object[]{a.getTitle(), a.getPublisher().getPublisherId(), a.getBookid()});
 	}
 	
 }

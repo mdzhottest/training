@@ -1,4 +1,4 @@
-package com.training.entities.domain;
+package com.gcit.training.lws.domain;
 
 import java.io.Serializable;
 import java.util.List;

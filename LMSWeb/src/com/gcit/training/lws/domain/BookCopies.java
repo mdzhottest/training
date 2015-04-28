@@ -1,8 +1,8 @@
-package com.training.entities.domain;
+package com.gcit.training.lws.domain;
 
 import java.io.Serializable;
 
-import com.training.entities.domain.LibraryBranch;
+import com.gcit.training.lws.domain.LibraryBranch;
 
 public class BookCopies implements Serializable {
 	

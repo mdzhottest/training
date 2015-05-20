@@ -1,121 +1,95 @@
 package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gcit.training.lws.domain.Author;
-import com.gcit.training.lws.domain.Book;
-
 
 public class AuthorDAO extends BaseDAO<Author> implements Serializable{
 
-	private static final long serialVersionUID = -4117083832091468714L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6356102358186501116L;
 	
-	//getting the connection
+	//establishes connection
 	public AuthorDAO(Connection conn){
 		super(conn);
 	}
 	
 	
-	//Adds the a new author value to the table
-	public void addAuthor(Author author) throws SQLException{
-		save("Insert into tbl_author (authorName) values (?)", new Object[]{author.getAuthorName()});
+	//adding authors to table
+	public void addAuthor(Author a) throws SQLException{
+		save("insert into tbl_author (authorName) values (?)",
+				new Object[]{a.getAuthorName()});
 	}
 	
+	//updating a specific author
 	public void updateAuthor(Author a) throws SQLException{
-		save("Update tbl_author set authorName = ? where authorId =?", new Object[]{a.getAuthorName(), a.getAuthorId()});
+		save("Update tbl_author set authorName = ? where authorId = ?",
+				new Object[]{a.getAuthorName(), a.getAuthorId()});
 	}
 	
-	public void delAuthor (Author a) throws SQLException{
-		save("Delete from tbl_author where authorId = ?", new Object[] {a.getAuthorId()});
+	//deleting author
+	public void removeAuthor(Author a) throws SQLException{
+		save("Delete from tbl_author where authorId = ?",
+				new Object[]{a.getAuthorId()});
 	}
 	
-	public Author readOne(int authorId) throws SQLException{
-		
-		@SuppressWarnings("unchecked")
-		List<Author> a = (List<Author>) read("Select * from tbl_author where authorId = ?", new Object[]{authorId});
-		
-		if (a !=null && a.size()>0){
-			return a.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	public Author readByName(String authorName) throws SQLException{
-		
-		@SuppressWarnings("unchecked")
-		List<Author> a = (List<Author>) read("Select * from tbl_author where authorName = ?",new Object[]{authorName} );
-		
-		if(a != null && a.size()>0){
-			return a.get(0);
-			
-		}else{
-			return null;
-		}
-		
-	}
-	
-	
+	//creates a list of all authors in the database
 	@SuppressWarnings("unchecked")
 	public List<Author> readAll() throws SQLException{
 		return (List<Author>) read("select * from tbl_author", null);
 	}
 	
-
-
-
-
+	//searches and displayes only one author by Id
+	public Author readOneByID(int authorId) throws SQLException{
+		@SuppressWarnings("unchecked")
+		List<Author> auth = (List<Author>) read("select * from tbl_author where authorId =?", new Object[]{authorId});
+		if (auth != null && auth.size()>0){
+			return auth.get(0);
+					
+		}else{
+			return null;
+		}
+	}
+	
+	//searches and displayes by author name
+	public Author readOneByAuthorName(String authorName)throws SQLException{
+		@SuppressWarnings("unchecked")
+		List<Author> a = (List<Author>) 
+				read("selecct * from tbl_author where authorName = ?", 
+						new Object[]{authorName});
+		if(a !=null && a.size()>0){
+			return a.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	
+	
+	//gets results from query using base DAO
 	@Override
 	protected List<Author> mapResults(ResultSet rs) throws SQLException {
 		// TODO Auto-generated method stub
-		List<Author> a = new ArrayList<Author>();
-		BookDAO bd = new BookDAO(conn);
-		while (rs.next()){
-			Author b = new Author();
-			b.setAuthorId(rs.getInt("authorId"));
-			b.setAuthorName(rs.getString("authorName"));
-
-			@SuppressWarnings("unchecked")
-			List<Book> books = (List<Book>) bd.readFirstLevel("select * from tbl_book where bookId in "
-					+ "(select bookId from tbl_book_authors where authorId = ?)", new Object[]{b.getAuthorId()});
-			b.setBooks(books);
-			
-			a.add(b);
+		List<Author> authors = new ArrayList<Author>();
+		BookDAO bD = new BookDAO(conn);
+		
+		while(rs.next()){
+			Author a =  new Author();
+			a.getAuthorId(rs.getInt(arg0));
 		}
-		return a;
 	}
-
 
 	@Override
-	protected List<Author> mapResultsFirstLevel(ResultSet rs) throws SQLException {
+	protected List<?> mapResultsFirstLevel(ResultSet rs) throws SQLException {
 		// TODO Auto-generated method stub
-		List<Author> a = new ArrayList<Author>();
-		while (rs.next()) {
-			Author b = new Author();
-			b.setAuthorId(rs.getInt("authorId"));
-			b.setAuthorName(rs.getString("authorName"));
-
-			a.add(b);
-		}
-		
-		return a;
+		return null;
 	}
 	
-	
-//	@Override
-//	protected List<Author> createResultsFirst(ResultSet rs) throws SQLException {
-//		List<Author> authors = new ArrayList<Author>();
-//		while(rs.next()){
-//			Author a = new Author();
-//			a.setAuthorId(rs.getInt("authorId"));
-//			a.setAuthorName(rs.getString("authorName"));
-//			
-//			authors.add(a);
-//		}
-//		return authors;
-	//}
 }
-	
-

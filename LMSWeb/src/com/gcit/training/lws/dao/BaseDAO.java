@@ -1,82 +1,89 @@
 package com.gcit.training.lws.dao;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 public abstract class BaseDAO<T> implements Serializable{
-	
-	
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5575403318597229670L;
+	private static final long serialVersionUID = -2550376202443630390L; 
 	
 	protected Connection conn = null;
-	public BaseDAO(Connection conn) {
+	
+	public BaseDAO(Connection conn){
 		this.conn = conn;
 	}
-
-	public List<?> read(String query, Object[] vals) throws SQLException {
-		PreparedStatement stmt = getConnection().prepareStatement(query);
+	
+	public List<?> read(String quer, Object[] vals)throws SQLException{
+		PreparedStatement stmt = getConnection().prepareStatement(quer);
 		int count = 1;
-		if(vals != null) {
-			for (Object obj : vals) {
+		if(vals != null){
+			for(Object obj: vals){
 				stmt.setObject(count++, obj);
+				
 			}
 		}
 		ResultSet rs = stmt.executeQuery();
-
 		return mapResults(rs);
 	}
-	protected abstract List<?> mapResults(ResultSet rs) throws SQLException;
 	
-	public List<?> readFirstLevel(String query, Object[] vals) throws SQLException {
-		PreparedStatement stmt = getConnection().prepareStatement(query);
+	protected abstract List<?>mapResults(ResultSet rs) throws SQLException;
+	
+	
+	
+	protected abstract List<?>mapResultsFirstLevel(ResultSet rs) throws SQLException;
+
+	
+	
+	public List<?> readFirstLevel(String quer, Object[] vals) throws SQLException{
+		PreparedStatement stmt = getConnection().prepareStatement(quer);
 		int count = 1;
-		if(vals != null) {
-			for (Object obj : vals) {
+		if(vals!=null){
+			for(Object obj: vals){
 				stmt.setObject(count++, obj);
 			}
 		}
 		ResultSet rs = stmt.executeQuery();
-
 		return mapResultsFirstLevel(rs);
 	}
-	protected abstract List<?> mapResultsFirstLevel(ResultSet rs) throws SQLException;
-
-	public void save(String query, Object[] vals) throws SQLException {
+	
+	
+	public void save(String q, Object[] vals) throws SQLException{
 		Connection conn = getConnection();
-		PreparedStatement pstmt = conn.prepareStatement(query);
-		int count = 1;
-		for (Object obj : vals) {
-			pstmt.setObject(count++, obj);
+		PreparedStatement stmt = conn.prepareStatement(q);
+		int count=1;
+		for (Object o:vals){
+			stmt.setObject(count++, o);
 		}
-		pstmt.executeUpdate();
-	}
-
-	public int saveWithId(String query, Object[] vals) throws SQLException {
-		Connection conn = getConnection();
-		PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-		int count = 1;
-		for (Object obj : vals) {
-			pstmt.setObject(count++, obj);
-		}
-		pstmt.executeUpdate();
+		stmt.executeUpdate();
 		
-		ResultSet rs = pstmt.getGeneratedKeys();
-		if(rs.next()) 
-			return rs.getInt(1);
-		else 
-			return -1;
 	}
-
-	private Connection getConnection() throws SQLException {
+	
+	public int saveWithID(String q, Object[] vals)throws SQLException{
+		Connection conn = getConnection();
+		PreparedStatement stmt = conn.prepareStatement(q, Statement.RETURN_GENERATED_KEYS);
+		int count = 1;
+		for(Object o: vals){
+			stmt.setObject(count++, o);
+		}
+		stmt.executeUpdate();
+		
+		ResultSet rs = stmt.getGeneratedKeys();
+		if(rs.next()){
+			return rs.getInt(1);
+		}else{
+			return -1;
+		}
+	}
+	
+	
+	private Connection getConnection() throws SQLException{
 		return conn;
 	}
-
+	
+	
+	
 }
